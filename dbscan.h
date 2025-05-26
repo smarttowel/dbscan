@@ -47,7 +47,7 @@ std::vector<std::vector<T>> Dbscan<T>::run(const std::vector<T> &points, float e
                         clusterId = currentClusterId;
 
                         std::vector<size_t> neighbors2 = rangeQuery(points, points[idx], eps, d);
-                        if(neighbors2.size() >= minPts)
+                        if(!neighbors2.empty() && neighbors2.size() >= minPts)
                             neighbors.insert(neighbors.end(), neighbors2.begin(), neighbors2.end());
                     }
                 }
