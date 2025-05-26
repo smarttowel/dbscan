@@ -1,5 +1,4 @@
-#ifndef DBSCAN_H
-#define DBSCAN_H
+#pragma once
 
 #include <vector>
 #include <algorithm>
@@ -12,8 +11,8 @@ public:
         Noise = -2,
         Undefined = -1
     };
-    using DistanceFunction = std::function<float(const T&, const T&)>;
-    std::vector<std::vector<T> > run(const std::vector<T> &points, float eps, size_t minPts, DistanceFunction d);
+    using DistanceFunction = std::function<float(const T &, const T &)>;
+    std::vector<std::vector<T>> run(const std::vector<T> &points, float eps, size_t minPts, DistanceFunction d);
 
 private:
     std::vector<size_t> rangeQuery(const std::vector<T> &db, const T &point, float eps, DistanceFunction d);
@@ -25,25 +24,20 @@ std::vector<std::vector<T>> Dbscan<T>::run(const std::vector<T> &points, float e
     std::vector<int> cluster(points.size(), Undefined);
 
     int currentClusterId = 0;
-    for(size_t i = 0; i < points.size(); i++)
-    {
-        if(cluster[i] == Undefined)
-        {
+    for(size_t i = 0; i < points.size(); i++) {
+        if(cluster[i] == Undefined) {
             std::vector<size_t> neighbors = rangeQuery(points, points[i], eps, d);
-            if(neighbors.size() >= minPts)
-            {
+            if(neighbors.size() >= minPts) {
                 cluster[i] = currentClusterId;
 
                 neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), i));
 
-                for(size_t j = 0; j < neighbors.size(); j++)
-                {
+                for(size_t j = 0; j < neighbors.size(); j++) {
                     size_t idx = neighbors[j];
                     int &clusterId = cluster[idx];
                     if(clusterId == Noise)
                         clusterId = currentClusterId;
-                    if(clusterId == Undefined)
-                    {
+                    if(clusterId == Undefined) {
                         clusterId = currentClusterId;
 
                         std::vector<size_t> neighbors2 = rangeQuery(points, points[idx], eps, d);
@@ -52,17 +46,14 @@ std::vector<std::vector<T>> Dbscan<T>::run(const std::vector<T> &points, float e
                     }
                 }
                 currentClusterId++;
-            }
-            else
-            {
+            } else {
                 cluster[i] = Noise;
             }
         }
     }
 
     std::vector<std::vector<T>> result(currentClusterId);
-    for(size_t j = 0; j < points.size(); j++)
-    {
+    for(size_t j = 0; j < points.size(); j++) {
         int clusterId = cluster[j];
         if(clusterId >= 0)
             result[clusterId].push_back(points[j]);
@@ -81,5 +72,3 @@ std::vector<size_t> Dbscan<T>::rangeQuery(const std::vector<T> &db, const T &poi
             result.push_back(i);
     return result;
 }
-
-#endif // DBSCAN_H

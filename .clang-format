@@ -1,0 +1,20 @@
+AccessModifierOffset: -4
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+BreakBeforeBraces: Linux
+BreakConstructorInitializers: AfterColon
+ColumnLimit: 0
+IndentCaseLabels: false
+IndentWidth: 4
+PointerAlignment: Right
+SortIncludes: false
+SpaceAfterTemplateKeyword: false
+SpaceBeforeCtorInitializerColon: false
+SpaceBeforeInheritanceColon: false
+SpaceBeforeParens: false
+SpaceBeforeRangeBasedForLoopColon: false
+SpacesInLineCommentPrefix:
+  Minimum: 0
+  Maximum: 1
+Standard: Auto
+UseTab: Never
