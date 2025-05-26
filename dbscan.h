@@ -12,6 +12,7 @@ public:
         Undefined = -1
     };
     using DistanceFunction = std::function<float(const T &, const T &)>;
+    std::vector<int> runIdx(const std::vector<T> &points, float eps, size_t minPts, DistanceFunction d);
     std::vector<std::vector<T>> run(const std::vector<T> &points, float eps, size_t minPts, DistanceFunction d);
 
 private:
@@ -19,7 +20,7 @@ private:
 };
 
 template<typename T>
-std::vector<std::vector<T>> Dbscan<T>::run(const std::vector<T> &points, float eps, size_t minPts, DistanceFunction d)
+std::vector<int> Dbscan<T>::runIdx(const std::vector<T> &points, float eps, size_t minPts, DistanceFunction d)
 {
     std::vector<int> cluster(points.size(), Undefined);
 
@@ -51,6 +52,14 @@ std::vector<std::vector<T>> Dbscan<T>::run(const std::vector<T> &points, float e
             }
         }
     }
+    
+    return cluster;
+}
+
+template<typename T>
+std::vector<std::vector<T>> Dbscan<T>::run(const std::vector<T> &points, float eps, size_t minPts, DistanceFunction d)
+{
+    auto cluster = runIdx(points, eps, minPts, d);
 
     std::vector<std::vector<T>> result(currentClusterId);
     for(size_t j = 0; j < points.size(); j++) {
